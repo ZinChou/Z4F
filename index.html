@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HBD · To My Love</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;500&display=swap');
+
+        body {
+            margin: 0;
+            background: #050505; /* 极深蓝黑，比纯黑更有质感 */
+            overflow: hidden;
+            font-family: 'Noto Serif SC', 'Source Han Serif SC', serif;
+            color: #d4af37; /* 香槟金 */
+            user-select: none;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 100%;
+            pointer-events: none; /* 穿透点击，方便放烟花 */
+        }
+
+        /* 优雅的入场动画 */
+        .title {
+            font-size: 3.5rem;
+            font-weight: 300;
+            letter-spacing: 0.5rem;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeInBlur 3s ease-out forwards;
+            background: linear-gradient(45deg, #d4af37, #f7e0a1, #d4af37);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            letter-spacing: 0.3rem;
+            color: rgba(212, 175, 55, 0.7);
+            opacity: 0;
+            animation: fadeIn 3s ease-out 1.5s forwards;
+        }
+
+        @keyframes fadeInBlur {
+            0% { opacity: 0; filter: blur(10px); transform: translate(-50%, -45%); }
+            100% { opacity: 1; filter: blur(0); transform: translate(-50%, -50%); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .hint {
+            position: absolute;
+            bottom: 40px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.8rem;
+            color: rgba(212, 175, 55, 0.4);
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="overlay">
+        <h1 class="title">生日快乐</h1>
+        <p class="subtitle">愿你 岁岁常欢愉 万事皆胜意</p>
+    </div>
+
+    <div class="hint">CLICK TO IGNITE THE NIGHT</div>
+
+    <canvas id="canvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+        let particles = [];
+        
+        // 颜色库：香槟金、玫瑰金、银色
+        const colors = ['#d4af37', '#f7e0a1', '#ffffff', '#ff9a9e', '#fad0c4'];
+
+        function init() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', init);
+        init();
+
+        class Particle {
+            constructor(x, y, color, velocity) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.velocity = velocity;
+                this.friction = 0.95;
+                this.gravity = 0.15;
+                this.opacity = 1;
+                this.life = Math.random() * 0.01 + 0.015;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 1, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.opacity;
+                ctx.fill();
+            }
+
+            update() {
+                this.velocity.x *= this.friction;
+                this.velocity.y *= this.friction;
+                this.velocity.y += this.gravity;
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                this.opacity -= this.life;
+            }
+        }
+
+        function createFirework(x, y) {
+            const count = 100;
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            const angleIncrement = (Math.PI * 2) / count;
+
+            for (let i = 0; i < count; i++) {
+                const velocity = {
+                    x: Math.cos(angleIncrement * i) * (Math.random() * 8),
+                    y: Math.sin(angleIncrement * i) * (Math.random() * 8)
+                };
+                particles.push(new Particle(x, y, color, velocity));
+            }
+        }
+
+        function render() {
+            // 实现丝滑的残留拖尾
+            ctx.fillStyle = 'rgba(5, 5, 5, 0.15)';
+            ctx.fillRect(0, 0, width, height);
+
+            particles.forEach((p, i) => {
+                if (p.opacity > 0) {
+                    p.update();
+                    p.draw();
+                } else {
+                    particles.splice(i, 1);
+                }
+            });
+
+            requestAnimationFrame(render);
+        }
+
+        window.addEventListener('mousedown', (e) => {
+            createFirework(e.clientX, e.clientY);
+        });
+
+        // 手机触摸支持
+        window.addEventListener('touchstart', (e) => {
+            createFirework(e.touches[0].clientX, e.touches[0].clientY);
+        });
+
+        // 自动开场
+        setTimeout(() => createFirework(width / 2, height / 3), 1000);
+        setTimeout(() => createFirework(width * 0.3, height * 0.4), 1800);
+        setTimeout(() => createFirework(width * 0.7, height * 0.4), 2200);
+
+        render();
+    </script>
+</body>
+</html>
