@@ -4,428 +4,614 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>生日快乐</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
-
 <style>
-
 :root{
---bg:#ffffff;
---text:#2c2c2c;
---accent:#ff6b81;
---accent2:#ffd166;
+  --bg:#fffafc;
+  --bg-soft:#fff4f7;
+  --text:#2f2730;
+  --muted:#8f7d86;
+  --accent:#ff5f87;
+  --accent-deep:#ff3f70;
+  --accent2:#ffd7a8;
+  --line:rgba(255,95,135,.14);
+  --shadow:0 24px 60px rgba(111, 76, 88, .14);
 }
 
 *{box-sizing:border-box}
-
+html{scroll-behavior:smooth}
 html,body{
-margin:0;
-background:var(--bg);
-font-family:"Noto Serif SC",serif;
-color:var(--text);
-overflow-x:hidden;
+  margin:0;
+  min-height:100%;
+  background:
+    radial-gradient(circle at top left, rgba(255,215,168,.34), transparent 30%),
+    radial-gradient(circle at top right, rgba(255,95,135,.12), transparent 28%),
+    linear-gradient(180deg, #fffafd 0%, #fff8fb 45%, #fffdfd 100%);
+  font-family:"Noto Serif SC",serif;
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.45), rgba(255,255,255,.45)),
+    radial-gradient(rgba(255,255,255,.35) 1px, transparent 1px);
+  background-size:auto, 18px 18px;
+  opacity:.35;
+  z-index:0;
 }
 
 canvas{
-position:fixed;
-inset:0;
-pointer-events:none;
-z-index:0;
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
 }
 
 .page{
-position:relative;
-z-index:2;
-max-width:1000px;
-margin:auto;
-padding:60px 20px 120px;
+  position:relative;
+  z-index:2;
+  max-width:1040px;
+  margin:auto;
+  padding:72px 20px 120px;
+}
+
+.hero,
+.letter,
+.memory-intro,
+.photos{
+  opacity:0;
+  transform:translateY(24px);
+  animation:riseIn 1s ease forwards;
+}
+
+.letter{animation-delay:.22s}
+.memory-intro{animation-delay:.42s}
+.photos{animation-delay:.58s}
+
+@keyframes riseIn{
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
 }
 
 .hero{
-text-align:center;
-margin-bottom:40px;
-position:relative;
+  text-align:center;
+  margin-bottom:42px;
+  position:relative;
+  padding:34px 18px 12px;
+}
+
+.hero .eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 16px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:rgba(255,255,255,.5);
+  backdrop-filter:blur(10px);
+  color:#9e6d7b;
+  font-size:13px;
+  letter-spacing:2px;
+  margin-bottom:18px;
 }
 
 .hero h1{
-font-family:"Zhi Mang Xing",cursive;
-font-size:90px;
-margin:0;
-color:#ff4d6d;
+  font-family:"Zhi Mang Xing",cursive;
+  font-size:104px;
+  line-height:1;
+  margin:0;
+  color:var(--accent-deep);
+  text-shadow:0 8px 24px rgba(255,95,135,.18), 0 0 1px rgba(255,95,135,.18);
+}
+
+.hero .subtitle{
+  margin:18px auto 0;
+  font-size:20px;
+  color:#7a6670;
+  letter-spacing:1px;
 }
 
 .hero .date{
-margin-top:10px;
-font-size:22px;
-color:#888;
-letter-spacing:2px;
+  margin-top:14px;
+  font-size:16px;
+  color:var(--muted);
+  letter-spacing:4px;
 }
 
 .decor{
-position:absolute;
-width:60px;
-height:60px;
-border-radius:50%;
-background:radial-gradient(circle,var(--accent2),transparent);
-opacity:.6;
+  position:absolute;
+  width:78px;
+  height:78px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(255,209,102,.75), rgba(255,95,135,.12) 45%, transparent 72%);
+  filter:blur(1px);
+  opacity:.72;
+  animation:floatGlow 5s ease-in-out infinite;
 }
 
-.decor.one{left:10%;top:-10px}
-.decor.two{right:15%;top:20px}
-.decor.three{left:20%;bottom:-20px}
+.decor.one{left:8%;top:-6px}
+.decor.two{right:12%;top:12px;animation-delay:1s}
+.decor.three{left:18%;bottom:-10px;animation-delay:2s}
+.decor.four{right:20%;bottom:0;animation-delay:1.4s}
 
-/* 信 */
+@keyframes floatGlow{
+  0%,100%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-8px) scale(1.06)}
+}
 
 .letter{
-background:linear-gradient(180deg,#ffffff,#fff7f9);
-padding:40px;
-border-radius:20px;
-box-shadow:0 20px 50px rgba(0,0,0,.08);
-line-height:2;
-font-size:20px;
-margin-bottom:60px;
+  position:relative;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,246,249,.96)),
+    repeating-linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,0) 34px, rgba(255,95,135,.03) 35px, rgba(255,255,255,0) 36px);
+  padding:52px 54px;
+  border-radius:28px;
+  border:1px solid rgba(255,255,255,.9);
+  box-shadow:var(--shadow);
+  line-height:2.1;
+  font-size:19px;
+  margin:0 auto 30px;
+  max-width:860px;
+  overflow:hidden;
+}
+
+.letter::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:28px;
+  border:1px solid rgba(255,95,135,.1);
+  pointer-events:none;
+}
+
+.letter::after{
+  content:"";
+  position:absolute;
+  top:18px;
+  right:22px;
+  width:92px;
+  height:92px;
+  background:radial-gradient(circle, rgba(255,95,135,.14), transparent 68%);
+  filter:blur(8px);
 }
 
 .cake{
-text-align:center;
-font-size:60px;
-margin-bottom:10px;
-animation:cakeFloat 3s ease-in-out infinite;
+  text-align:center;
+  font-size:58px;
+  margin-bottom:12px;
+  animation:cakeFloat 3.6s ease-in-out infinite;
 }
 
 @keyframes cakeFloat{
-0%{transform:translateY(0)}
-50%{transform:translateY(-8px)}
-100%{transform:translateY(0)}
+  0%{transform:translateY(0)}
+  50%{transform:translateY(-7px)}
+  100%{transform:translateY(0)}
 }
 
-.salutation{font-weight:600;margin-bottom:20px}
-.paragraph{text-indent:2em;margin-bottom:16px}
-.closing{margin-top:30px}
-.signature{text-align:right;margin-top:10px;font-style:italic}
-.postscript{margin-top:20px;font-size:15px;color:#777}
+.salutation{
+  font-weight:600;
+  margin-bottom:22px;
+  font-size:21px;
+}
 
-/* 照片 */
+.paragraph{
+  text-indent:2em;
+  margin:0 0 18px;
+}
+
+.quote-line{
+  margin:28px auto;
+  text-align:center;
+  font-size:22px;
+  color:var(--accent-deep);
+  font-family:"Zhi Mang Xing",cursive;
+  letter-spacing:1px;
+}
+
+.closing{
+  margin-top:32px;
+}
+
+.signature{
+  text-align:right;
+  margin-top:14px;
+  font-style:italic;
+  color:#785d68;
+}
+
+.postscript{
+  margin-top:22px;
+  padding-top:16px;
+  border-top:1px dashed rgba(255,95,135,.22);
+  font-size:14px;
+  color:#8e7a82;
+}
+
+.memory-intro{
+  text-align:center;
+  color:#8f7984;
+  margin:0 auto 22px;
+  font-size:16px;
+  letter-spacing:2px;
+}
 
 .photos{
-margin-top:40px;
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:24px;
+  margin-top:18px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:24px;
 }
 
 .photo{
-background:white;
-padding:12px;
-border-radius:16px;
-box-shadow:0 10px 30px rgba(0,0,0,.08);
-transform:rotate(-1deg);
-transition:.3s;
+  background:rgba(255,255,255,.86);
+  padding:12px 12px 18px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.85);
+  box-shadow:0 16px 35px rgba(89, 63, 72, .1);
+  transform:rotate(-1deg);
+  transition:transform .35s ease, box-shadow .35s ease;
+  backdrop-filter:blur(8px);
 }
 
-.photo:nth-child(2){transform:rotate(2deg)}
-.photo:nth-child(3){transform:rotate(-2deg)}
+.photo:nth-child(2){transform:rotate(1.6deg)}
+.photo:nth-child(3){transform:rotate(-1.6deg)}
 
-.photo:hover{transform:scale(1.05) rotate(0deg)}
+.photo:hover{
+  transform:translateY(-4px) scale(1.02) rotate(0deg);
+  box-shadow:0 24px 44px rgba(89, 63, 72, .16);
+}
 
 .photo img{
-width:100%;
-border-radius:12px;
-display:block;
+  width:100%;
+  aspect-ratio:1 / 1;
+  object-fit:cover;
+  border-radius:12px;
+  display:block;
 }
 
-/* 心 */
+.caption{
+  text-align:center;
+  margin-top:12px;
+  color:#7e6872;
+  font-size:15px;
+  letter-spacing:.5px;
+}
 
 .heart{
-position:fixed;
-font-size:18px;
-color:#ff6b81;
-animation:float 8s linear infinite;
-opacity:.6;
-z-index:1;
+  position:fixed;
+  font-size:16px;
+  color:#ff6b81;
+  animation:float 8.8s linear forwards;
+  opacity:.5;
+  z-index:1;
 }
 
 @keyframes float{
-0%{transform:translateY(100vh) scale(.8)}
-100%{transform:translateY(-10vh) scale(1.2)}
+  0%{transform:translateY(100vh) scale(.82)}
+  100%{transform:translateY(-12vh) scale(1.18)}
 }
-
-/* 音乐按钮 */
 
 .music{
-position:fixed;
-right:20px;
-bottom:20px;
-background:#ff6b81;
-color:white;
-border:none;
-border-radius:50px;
-padding:12px 18px;
-font-size:14px;
-box-shadow:0 8px 20px rgba(0,0,0,.15);
-cursor:pointer;
-z-index:5;
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:rgba(255,255,255,.56);
+  color:#7f5564;
+  border:1px solid rgba(255,255,255,.85);
+  border-radius:999px;
+  padding:12px 18px;
+  font-size:14px;
+  box-shadow:0 12px 28px rgba(0,0,0,.1);
+  backdrop-filter:blur(14px);
+  cursor:pointer;
+  z-index:5;
+  transition:transform .25s ease, box-shadow .25s ease, background .25s ease;
 }
 
+.music:hover{
+  transform:translateY(-2px);
+  box-shadow:0 18px 32px rgba(0,0,0,.12);
+}
+
+.music.playing .disc{
+  animation:spin 3.6s linear infinite;
+}
+
+.disc{
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  border:2px solid rgba(255,95,135,.45);
+  position:relative;
+}
+
+.disc::after{
+  content:"";
+  position:absolute;
+  inset:5px;
+  border-radius:50%;
+  background:rgba(255,95,135,.45);
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+
+@media (max-width: 768px){
+  .page{padding:52px 16px 96px}
+  .hero{margin-bottom:28px}
+  .hero h1{font-size:64px}
+  .hero .subtitle{font-size:17px; line-height:1.7; max-width:280px}
+  .hero .date{font-size:14px; letter-spacing:3px}
+  .letter{
+    padding:28px 22px;
+    font-size:17px;
+    line-height:2;
+    border-radius:24px;
+  }
+  .salutation{font-size:19px}
+  .quote-line{font-size:19px}
+  .cake{font-size:50px}
+  .memory-intro{font-size:14px; letter-spacing:1.5px}
+  .photos{gap:18px}
+  .music{right:14px; bottom:14px; padding:11px 16px}
+}
 </style>
 </head>
-
 <body>
-
 <audio id="music" src="simple.mp3" loop></audio>
-
-<button class="music" onclick="toggleMusic()">音乐开关</button>
-
+<button class="music" id="musicButton" onclick="toggleMusic()">
+  <span class="disc" aria-hidden="true"></span>
+  <span id="musicLabel">音乐已开启</span>
+</button>
 <canvas id="fireworks"></canvas>
-
 <div class="page">
+  <div class="hero">
+    <div class="decor one"></div>
+    <div class="decor two"></div>
+    <div class="decor three"></div>
+    <div class="decor four"></div>
 
-<div class="hero">
+    <div class="eyebrow">TO THE MOST SPECIAL YOU</div>
+    <h1>生日快乐</h1>
+    <div class="subtitle">给你的一封生日情书，写给 2026 年最特别的一天。</div>
+    <div class="date">2026 · 04 · 01</div>
+  </div>
 
-<div class="decor one"></div>
-<div class="decor two"></div>
-<div class="decor three"></div>
+  <div class="letter">
+    <div class="cake">🫐💗🍓</div>
+    <div class="salutation">我最最最爱的宝宝：</div>
 
-<h1>生日快乐</h1>
-<div class="date">（2026.2.12 - FOREVER）</div>
+    <div class="quote-line">！！！生日快乐呀！！！</div>
 
-</div>
+    <p class="paragraph">因为你的出现，今天变成了我生命里格外重要、格外珍贵的一天。我也想借着这个特别的日子，把藏在心底的温柔、独属于你的偏爱，还有很多很多当面不好意思说出口的话，全都认认真真写进这封信里。愿你在新的一岁里，被爱意紧紧包围，被好运时时照亮，也永远被自己坚定地喜欢与接纳。</p>
+    <p class="paragraph">很庆幸，能在今年年初就遇见了你。在此之前，我从没想过，那种别人口中甜甜的恋爱，有一天也会真真切切降落在我身上。和你在一起的每一个幸福瞬间，你认真对我说过的每一句话，你不经意间流露出来的可爱、温柔与真诚，都在一点点治愈我、温暖我，也让我真切地明白：原来日子真的会因为一个人，变得闪闪发光，变得充满期待，变得值得好好去过。</p>
 
-<div class="letter">
+    <div class="quote-line">今天的你，要比蛋糕更甜一点。</div>
 
-<div class="cake">🍓💗🫐</div>
+    <p class="paragraph">在我心里，生日从来不止是提醒我们又长大了一岁，它更像是在告诉我：你这么好，值得被好好庆祝，值得拥有鲜花、惊喜、浪漫和数不尽的真心与偏爱。希望未来的每一天，你都能自在舒服地做最真实的自己，继续勇敢发光，继续大胆去追逐你想要的一切，去见你想见的人，去完成你心里的每一个小愿望。</p>
 
-<div class="salutation">亲爱的你：</div>
+    <p class="paragraph">如果有一天你累了、倦了、难过了，一定要记得告诉我。我会一直安安静静陪在你身边，支持你所有的选择，理解你的情绪，为你分担烦恼，给你足够的安心和底气。不管发生什么，我都在。</p>
 
-<p class="paragraph">这里写信的正文内容。</p>
-<p class="paragraph">你可以写回忆、祝福、或者想说的话。</p>
-<p class="paragraph">这是一封只属于今天的信。</p>
+    <p class="paragraph">信写到这里，就要结束啦。我文笔普通，写不出多么华丽动听的话，也没办法把心里的感动与喜欢表达出万分之一。但如果你愿意，我不想只用文字说爱你，我想用往后的每一天、每一次陪伴、每一个行动，用我的整个余生，慢慢告诉你，我有多爱你。</p>
 
-<div class="closing">生日快乐，愿未来的每一天都被温柔包围。</div>
+    <div class="quote-line">浮世万千，吾爱有三。日、月与卿。日为朝，月为暮，卿为朝朝暮暮。</div>
+    <div class="closing">愿你所求皆如愿，所行皆坦途，所盼皆可期。愿今天的风、温柔的灯光、快乐的歌声和天上的星星，都在悄悄为你祝福，愿你永远被温柔以待，永远幸福，永远被爱。</div>
 
-<div class="signature">—— 你的名字</div>
+    <div class="quote-line">往后余生，我想一直牵着你的手，慢慢走，一直走。</div>
+    
+    <div class="signature">—— 周智勤</div>
+    <div class="postscript">页面里的烟花会慢慢安静下来，就像热闹过后，留下来的仍然是很长很长的温柔。</div>
+  </div>
 
-<div class="postscript">P.S. 烟花会一直在天空中绽放。</div>
+  <div class="memory-intro">把喜欢藏进照片里，把心动留在每一个瞬间。</div>
 
-</div>
-
-<div class="photos">
-
-<div class="photo">
-<img src="imgs/1.jpg">
-</div>
-
-<div class="photo">
-<img src="imgs/2.jpg">
-</div>
-
-<div class="photo">
-<img src="imgs/3.jpg">
-</div>
-
-</div>
-
+  <div class="photos">
+    <div class="photo">
+      <img src="imgs/1.jpg" alt="回忆照片 1">
+      <div class="caption">第一张照片记录幸福到永远</div>
+    </div>
+    <div class="photo">
+      <img src="imgs/2.jpg" alt="回忆照片 2">
+      <div class="caption">你笑起来的时候，世界都变软了</div>
+    </div>
+    <div class="photo">
+      <img src="imgs/3.jpg" alt="回忆照片 3">
+      <div class="caption">就这样牵着你的手不放开</div>
+    </div>
+  </div>
 </div>
 
 <script>
+const music = document.getElementById("music");
+const musicButton = document.getElementById("musicButton");
+const musicLabel = document.getElementById("musicLabel");
 
-/* 音乐 */
+music.volume = 0;
 
-const music = document.getElementById("music")
-
-music.volume = 0
+function setMusicState(isPlaying){
+  musicButton.classList.toggle("playing", isPlaying);
+  musicLabel.textContent = isPlaying ? "音乐已开启" : "音乐已暂停";
+}
 
 function fadeInMusic(){
-
-let v = 0
-music.play().catch(()=>{})
-
-const timer = setInterval(()=>{
-v += 0.02
-if(v >= 1){
-v = 1
-clearInterval(timer)
-}
-music.volume = v
-},120)
-
+  let v = 0;
+  music.play().then(()=>setMusicState(true)).catch(()=>setMusicState(false));
+  const timer = setInterval(()=>{
+    v += 0.02;
+    if(v >= 0.9){
+      v = 0.9;
+      clearInterval(timer);
+    }
+    music.volume = v;
+  }, 120);
 }
 
-window.addEventListener("load",fadeInMusic)
+window.addEventListener("load", fadeInMusic);
 
-document.addEventListener("click",()=>{
-music.play()
-},{once:true})
+document.addEventListener("click", ()=>{
+  music.play().then(()=>setMusicState(true)).catch(()=>{});
+}, { once:true });
 
 function toggleMusic(){
-if(music.paused) music.play()
-else music.pause()
+  if(music.paused){
+    music.play().then(()=>setMusicState(true)).catch(()=>setMusicState(false));
+  }else{
+    music.pause();
+    setMusicState(false);
+  }
 }
 
-/* hearts */
+let heartInterval = 1200;
+let heartTimer = null;
 
-setInterval(()=>{
+function spawnHeart(){
+  const h = document.createElement("div");
+  h.className = "heart";
+  h.innerHTML = Math.random() > 0.45 ? "❤" : "♡";
+  h.style.left = Math.random() * 100 + "vw";
+  h.style.animationDuration = 7 + Math.random() * 4 + "s";
+  h.style.fontSize = 14 + Math.random() * 10 + "px";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(), 12000);
+}
 
-const h=document.createElement("div")
-h.className="heart"
-h.innerHTML="❤"
-h.style.left=Math.random()*100+"vw"
-h.style.animationDuration=6+Math.random()*6+"s"
+function startHearts(){
+  heartTimer = setInterval(spawnHeart, heartInterval);
+}
 
-document.body.appendChild(h)
+startHearts();
 
-setTimeout(()=>h.remove(),12000)
+const canvas = document.getElementById("fireworks");
+const ctx = canvas.getContext("2d");
 
-},900)
+let w = window.innerWidth;
+let h = window.innerHeight;
+canvas.width = w;
+canvas.height = h;
 
-/* fireworks */
+window.addEventListener("resize", ()=>{
+  w = window.innerWidth;
+  h = window.innerHeight;
+  canvas.width = w;
+  canvas.height = h;
+});
 
-const canvas=document.getElementById("fireworks")
-const ctx=canvas.getContext("2d")
-
-let w=window.innerWidth
-let h=window.innerHeight
-
-canvas.width=w
-canvas.height=h
-
-window.addEventListener("resize",()=>{
-
-w=window.innerWidth
-h=window.innerHeight
-
-canvas.width=w
-canvas.height=h
-
-})
-
-let fireworks=[]
-let particles=[]
+let fireworks = [];
+let particles = [];
+let fireworkInterval = 900;
+let fireworksTimer = null;
+const fireworksStart = Date.now();
 
 class Firework{
+  constructor(){
+    this.x = Math.random() * w;
+    this.y = h;
+    this.targetY = 120 + Math.random() * Math.min(320, h * 0.42);
+    this.speed = 5.8 + Math.random() * 1.8;
+    this.color = Math.random() * 360;
+  }
 
-constructor(){
+  update(){
+    this.y -= this.speed;
+    if(this.y <= this.targetY){
+      explode(this.x, this.y, this.color);
+      return true;
+    }
+    return false;
+  }
 
-this.x=Math.random()*w
-this.y=h
-this.targetY=120+Math.random()*280
-this.speed=6+Math.random()*2
-this.color=Math.random()*360
-
-}
-
-update(){
-
-this.y-=this.speed
-
-if(this.y<=this.targetY){
-
-explode(this.x,this.y,this.color)
-return true
-
-}
-
-return false
-
-}
-
-draw(){
-
-ctx.beginPath()
-ctx.arc(this.x,this.y,3,0,Math.PI*2)
-ctx.fillStyle=`hsl(${this.color},100%,60%)`
-ctx.fill()
-
-}
-
+  draw(){
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, 2.8, 0, Math.PI * 2);
+    ctx.fillStyle = `hsl(${this.color},100%,64%)`;
+    ctx.fill();
+  }
 }
 
 class Particle{
+  constructor(x, y, color){
+    const angle = Math.random() * Math.PI * 2;
+    const speed = Math.random() * 5.5;
+    this.x = x;
+    this.y = y;
+    this.vx = Math.cos(angle) * speed;
+    this.vy = Math.sin(angle) * speed;
+    this.life = 76;
+    this.color = color;
+  }
 
-constructor(x,y,color){
+  update(){
+    this.x += this.vx;
+    this.y += this.vy;
+    this.vy += 0.035;
+    this.life--;
+  }
 
-const angle=Math.random()*Math.PI*2
-const speed=Math.random()*6
-
-this.x=x
-this.y=y
-this.vx=Math.cos(angle)*speed
-this.vy=Math.sin(angle)*speed
-this.life=80
-this.color=color
-
+  draw(){
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, 1.9, 0, Math.PI * 2);
+    ctx.fillStyle = `hsla(${this.color},100%,62%,${Math.max(this.life / 76, 0)})`;
+    ctx.fill();
+  }
 }
 
-update(){
-
-this.x+=this.vx
-this.y+=this.vy
-this.vy+=0.04
-this.life--
-
+function explode(x, y, color){
+  for(let i = 0; i < 64; i++){
+    particles.push(new Particle(x, y, color));
+  }
 }
 
-draw(){
+function launchFireworks(){
+  const elapsed = Date.now() - fireworksStart;
+  let count = 1;
 
-ctx.beginPath()
-ctx.arc(this.x,this.y,2,0,Math.PI*2)
-ctx.fillStyle=`hsl(${this.color},100%,60%)`
-ctx.fill()
+  if(elapsed < 8000){
+    count = Math.random() > 0.55 ? 2 : 1;
+  }
 
-}
+  for(let i = 0; i < count; i++){
+    fireworks.push(new Firework());
+  }
 
-}
-
-function explode(x,y,color){
-
-for(let i=0;i<90;i++){
-
-particles.push(new Particle(x,y,color))
-
-}
-
+  if(elapsed > 8000 && fireworkInterval !== 1600){
+    clearInterval(fireworksTimer);
+    fireworkInterval = 1600;
+    fireworksTimer = setInterval(launchFireworks, fireworkInterval);
+  }
 }
 
 function animate(){
+  ctx.clearRect(0, 0, w, h);
 
-ctx.fillStyle="rgba(255,255,255,.25)"
-ctx.fillRect(0,0,w,h)
+  for(let i = fireworks.length - 1; i >= 0; i--){
+    const f = fireworks[i];
+    if(f.update()) fireworks.splice(i, 1);
+    else f.draw();
+  }
 
-for(let i=fireworks.length-1;i>=0;i--){
+  for(let i = particles.length - 1; i >= 0; i--){
+    const p = particles[i];
+    p.update();
+    p.draw();
+    if(p.life <= 0) particles.splice(i, 1);
+  }
 
-const f=fireworks[i]
-
-if(f.update()) fireworks.splice(i,1)
-else f.draw()
-
+  requestAnimationFrame(animate);
 }
 
-particles.forEach((p,i)=>{
-
-p.update()
-p.draw()
-
-if(p.life<=0) particles.splice(i,1)
-
-})
-
-requestAnimationFrame(animate)
-
-}
-
-setInterval(()=>{
-
-const count=1
-
-for(let i=0;i<count;i++){
-fireworks.push(new Firework())
-}
-
-},1000)
-
-animate()
-
+fireworksTimer = setInterval(launchFireworks, fireworkInterval);
+animate();
 </script>
-
 </body>
 </html>
