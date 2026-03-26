@@ -391,10 +391,26 @@ body {
   gap: 24px;
 }
 
-/* 移动端：让 minmax 失效，强制单列 */
+/* 移动端单列照片 */
 @media (max-width: 480px) {
   .photos {
     grid-template-columns: 1fr; /* 单列 */
+    gap: 28px;              /* 稍大间隙 */
+  }
+  .photo {
+    max-width: 360px;       /* 卡片最大 360px，比原版 220px 大 */
+    margin: 0 auto;
+    padding: 14px 14px 22px; /* 内边距大一点 */
+  }
+  .photo .img-wrap {
+    border-radius: 14px;    /* 图片圆角同步放大 */
+  }
+  .photo img {
+    border-radius: 14px;
+  }
+  .caption {
+    font-size: 16px;        /* 标题稍大 */
+    margin-top: 14px;
   }
 }
 
